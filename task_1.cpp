@@ -1,13 +1,15 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 #include <iomanip>
+
+const int MAX_NUMBER_OF_USERS = 100000;
+const int MAX_NUMBER_OF_PAGES = 1000;
 
 
 
 class EbookAccounter {
     public:
-    EbookAccounter() : users_(std::vector<int>(100000)), number_of_users_(std::vector<int>(1000))
+    EbookAccounter() : users_(std::vector<int>(MAX_NUMBER_OF_USERS)), number_of_users_(std::vector<int>(MAX_NUMBER_OF_PAGES))
     {
     };
     
@@ -21,24 +23,23 @@ class EbookAccounter {
         users_[user_id] = page;   
     }
     
-    void Cheer(int user_id){
+    void Cheer(int user_id, std::ostream& out){
         if (users_[user_id] == 0){
-            std::cout << 0 << std::endl;
+            out << 0 << std::endl;
         }
         else if (users_[user_id] != 0 && total_number_users_ == 1) {
-            std::cout << 1 << std::endl;
+            out << 1 << std::endl;
         }
         else {
             double number_of_lowers = total_number_users_ - number_of_users_[users_[user_id]];
             double result = number_of_lowers / (total_number_users_ - 1);
-            std::cout << std::setprecision(6) << result << std::endl;
+            out << std::setprecision(6) << result << std::endl;
         }
-
     }
     
     private:
     std::vector<int> users_;
-    std::vector<int> number_of_users_;
+    std::vector<int> number_of_users_; //Number of users that read at least N pages
     int total_number_users_ = 0;
 };
 
@@ -60,7 +61,7 @@ int main(){
         if (request_type == "CHEER"){
             int user = 0;
             std::cin >> user;
-            accounter.Cheer(user);
+            accounter.Cheer(user, std::cout);
         }
         --counter;
     }

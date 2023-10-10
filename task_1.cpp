@@ -23,17 +23,17 @@ class EbookAccounter {
         users_[user_id] = page;   
     }
     
-    void Cheer(int user_id, std::ostream& out){
+    double Cheer(int user_id){
         if (users_[user_id] == 0){
-            out << 0 << std::endl;
+            return 0;
         }
         else if (users_[user_id] != 0 && total_number_users_ == 1) {
-            out << 1 << std::endl;
+            return 1;
         }
         else {
             double number_of_lowers = total_number_users_ - number_of_users_[users_[user_id]];
             double result = number_of_lowers / (total_number_users_ - 1);
-            out << std::setprecision(6) << result << std::endl;
+            return result;
         }
     }
     
@@ -61,7 +61,7 @@ int main(){
         if (request_type == "CHEER"){
             int user = 0;
             std::cin >> user;
-            accounter.Cheer(user, std::cout);
+            std::cout << std::setprecision(6) << accounter.Cheer(user) << std::endl;
         }
         --counter;
     }

@@ -49,15 +49,21 @@ struct Person_parameters {
 
 };
 
-vector<Person> LoadPersons(const DB_parameters& db_parameters, const Person_parameters person_parameters) {
+DBHandler BuildDBHandler (const DB_parameters& db_parameters){
     DBConnector connector(db_parameters.allow_exceptions, db_parameters.log_level);
-    DBHandler db;
-    if (db_name.starts_with("tmp."s)) {
-        db = connector.ConnectTmp(db_parameters.db_name, db_parameters.time_out);
+     if (db_parameters.db_name.starts_with("tmp."s)) {
+        return connector.ConnectTmp(db_parameters.db_name, db_parameters.time_out);
     } else {
-        db = connector.Connect(db_parameters.db_name, db_parameters.time_out);
+        return connector.Connect(db_parameters.db_name, db_parameters.time_out);
     }
-    if (!db_allow_exceptions && !db.IsOK()) {
+
+}
+
+vector<Person> LoadPersons(const DB_parameters& db_parameters, const Person_parameters person_parameters) {
+
+    DBHandler db = BuildDBHandler(db_parameters);
+
+    if (!db_parameters.allow_exceptions && !db.IsOK()) {
         return {};
     }
 
